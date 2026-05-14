@@ -22,152 +22,256 @@ export default function EventsSection() {
   const inView = useInView(ref, { once: true, margin: "-60px" });
 
   return (
-    <section
-      id="events"
-      style={{
-        background: "#fff",
-        paddingTop: 90,
-        paddingBottom: 90,
-        borderTop: "1px solid #e8e2d9",
-      }}
-    >
-      <div style={{ maxWidth: 1320, margin: "0 auto", paddingLeft: 80, paddingRight: 80 }}>
+    <>
+      <style>{`
+        /* ── Events Section ── */
+        .events-section {
+          background: #fff;
+          padding: 90px 0;
+          border-top: 1px solid #e8e2d9;
+        }
+        .events-container {
+          max-width: 1320px;
+          margin: 0 auto;
+          padding: 0 80px;
+        }
 
-        {/* ── Header Row ── */}
-        <div
-          ref={ref}
-          style={{
-            display: "flex",
-            alignItems: "flex-end",
-            justifyContent: "space-between",
-            marginBottom: 60,
-            gap: 24,
-          }}
-        >
-          {/* Left: Title */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8 }}
-            style={{ flexShrink: 0, paddingLeft: 80 }}
-          >
-            {/* Row 1: Grey line + Title block */}
-            <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
-              <div style={{ width: 80, height: 1, background: "#a0a0a0", flexShrink: 0 }} />
-              {/* Title: both lines in a tight flex column */}
-              <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-                <span style={{
-                  fontFamily: "'Cormorant Garamond', serif",
-                  fontSize: "clamp(2rem, 3.5vw, 2.8rem)",
-                  fontWeight: 300, color: "#4a4540",
-                  letterSpacing: "0.02em", textTransform: "uppercase",
-                  lineHeight: 1, display: "block",
-                }}>EVENTS AND</span>
-                <span style={{
-                  fontFamily: "'Cormorant Garamond', serif",
-                  fontSize: "clamp(2rem, 3.5vw, 2.8rem)",
-                  fontWeight: 300, color: "#4a4540",
-                  letterSpacing: "0.02em", textTransform: "uppercase",
-                  lineHeight: 1, display: "block",
-                }}>CONFERENCES</span>
-              </div>
-            </div>
-          </motion.div>
+        /* ── Header Row ── */
+        .events-header {
+          display: flex;
+          align-items: flex-end;
+          justify-content: space-between;
+          margin-bottom: 60px;
+          gap: 24px;
+        }
+        .events-title-wrap {
+          flex-shrink: 0;
+          padding-left: 80px;
+        }
+        .events-title-row1 {
+          display: flex;
+          align-items: center;
+          gap: 24px;
+        }
+        .events-title-line {
+          width: 80px;
+          height: 1px;
+          background: #a0a0a0;
+          flex-shrink: 0;
+        }
+        .events-title-text {
+          font-family: 'Cormorant Garamond', serif;
+          font-size: clamp(2rem, 3.5vw, 2.8rem);
+          font-weight: 300;
+          color: #4a4540;
+          letter-spacing: 0.02em;
+          text-transform: uppercase;
+          line-height: 1;
+          display: block;
+        }
+        .events-title-row2 {
+          padding-left: 0;
+        }
+        .events-subtitle {
+          max-width: 380px;
+          font-family: 'Inter', sans-serif;
+          font-size: 0.95rem;
+          color: #6b6560;
+          line-height: 1.7;
+          padding-top: 8px;
+          text-align: left;
+        }
 
-          {/* Right: Subtitle */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={inView ? { opacity: 1 } : {}}
-            transition={{ delay: 0.3, duration: 0.8 }}
-            style={{
-              maxWidth: 380,
-              fontFamily: "'Inter', sans-serif",
-              fontSize: "0.95rem",
-              color: "#6b6560",
-              lineHeight: 1.7,
-              paddingTop: 8,
-              textAlign: "left",
-            }}
-          >
-            Aurum Palace elevates every occasion into an awe-inspiring, immersive experience to cherish forever.
-          </motion.p>
-        </div>
+        /* ── Cards Grid ── */
+        .events-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 24px;
+        }
+        .event-card {
+          cursor: pointer;
+          display: flex;
+          flex-direction: column;
+          position: relative;
+        }
+        .event-card-img-wrap {
+          position: relative;
+          overflow: hidden;
+          aspect-ratio: 3/2.5;
+          width: 100%;
+        }
+        .event-card-img {
+          position: absolute;
+          inset: 0;
+          background-size: cover;
+          background-position: center;
+          transition: transform 0.8s cubic-bezier(0.25, 1, 0.35, 1);
+        }
+        .event-card:hover .event-card-img {
+          transform: scale(1.05);
+        }
+        .event-card-label {
+          background: #fff;
+          padding: 14px 20px 16px 20px;
+          position: relative;
+          margin-top: -44px;
+          margin-left: 30%;
+          margin-right: 0;
+          z-index: 2;
+          box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+          min-height: 72px;
+          display: flex;
+          align-items: center;
+        }
+        .event-card-label p {
+          font-family: 'Cormorant Garamond', serif;
+          font-size: 1rem;
+          font-weight: 400;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+          color: #333;
+          line-height: 1.25;
+          white-space: pre-line;
+          margin: 0;
+        }
 
-        {/* ── 3 Cards ── */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: 24,
-          }}
-        >
-          {EVENTS.map((e, i) => (
+        /* ── TABLET (768px – 1023px) ── */
+        @media (max-width: 1023px) {
+          .events-container {
+            padding: 0 40px;
+          }
+          .events-title-wrap {
+            padding-left: 40px;
+          }
+          .events-header {
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 40px;
+            gap: 16px;
+          }
+          .events-subtitle {
+            max-width: 100%;
+          }
+          .events-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+          }
+          .event-card {
+            width: calc(50% - 10px);
+          }
+        }
+
+        /* ── MOBILE (< 768px) ── */
+        @media (max-width: 767px) {
+          .events-section {
+            padding: 60px 0;
+          }
+          .events-container {
+            padding: 0 20px;
+          }
+          .events-title-wrap {
+            padding-left: 0;
+          }
+          .events-title-line {
+            width: 50px;
+          }
+          .events-title-text {
+            font-size: clamp(1.6rem, 7vw, 2.2rem);
+          }
+          .event-card-img-wrap {
+            aspect-ratio: unset;
+            height: 260px;
+          }
+          .events-header {
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 32px;
+            gap: 12px;
+          }
+          .events-subtitle {
+            font-size: 0.88rem;
+            max-width: 100%;
+          }
+          .events-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 28px;
+          }
+          .event-card {
+            width: 100%;
+          }
+          .event-card-label {
+            margin-left: 20%;
+            min-height: 60px;
+          }
+        }
+      `}</style>
+
+      <section id="events" className="events-section">
+        <div className="events-container">
+
+          {/* ── Header Row ── */}
+          <div ref={ref} className="events-header">
+
+            {/* Left: Title */}
             <motion.div
-              key={i}
-              className="group"
-              initial={{ opacity: 0, y: 28 }}
+              initial={{ opacity: 0, y: 16 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: i * 0.12 + 0.2, duration: 0.7 }}
-              style={{ cursor: "pointer", display: "flex", flexDirection: "column", position: "relative" }}
+              transition={{ duration: 0.8 }}
+              className="events-title-wrap"
             >
-              {/* Image */}
-              <div
-                style={{
-                  position: "relative",
-                  overflow: "hidden",
-                  aspectRatio: "3/2.5",
-                }}
-              >
-                <div
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    backgroundImage: `url('${e.image}')`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    transition: "transform 0.8s cubic-bezier(0.25, 1, 0.35, 1)",
-                  }}
-                  className="group-hover:scale-[1.05]"
-                />
+              {/* Row 1: Grey line + "EVENTS AND" */}
+              <div className="events-title-row1">
+                <div className="events-title-line" />
+                <span className="events-title-text">EVENTS AND</span>
               </div>
-
-              {/* White floating label at bottom - starts 30% from left, flush right */}
-              <div
-                style={{
-                  background: "#fff",
-                  padding: "14px 20px 16px 20px",
-                  position: "relative",
-                  marginTop: "-44px",
-                  marginLeft: "30%",
-                  marginRight: "0",
-                  zIndex: 2,
-                  boxShadow: "0 6px 24px rgba(0,0,0,0.08)",
-                  minHeight: 72,        // Same height for all 3 cards
-                  display: "flex",
-                  alignItems: "center", // Vertically center single-line text
-                }}
-              >
-                <p
-                  style={{
-                    fontFamily: "'Cormorant Garamond', serif",
-                    fontSize: "1rem",
-                    fontWeight: 400,
-                    letterSpacing: "0.04em",
-                    textTransform: "uppercase",
-                    color: "#333",
-                    lineHeight: 1.25,
-                    whiteSpace: "pre-line",
-                    margin: 0,
-                  }}
-                >
-                  {e.title}
-                </p>
+              {/* Row 2: "CONFERENCES" below the line */}
+              <div className="events-title-row2">
+                <span className="events-title-text">CONFERENCES</span>
               </div>
             </motion.div>
-          ))}
-        </div>
 
-      </div>
-    </section>
+            {/* Right: Subtitle */}
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={inView ? { opacity: 1 } : {}}
+              transition={{ delay: 0.3, duration: 0.8 }}
+              className="events-subtitle"
+            >
+              Aurum Palace elevates every occasion into an awe-inspiring, immersive experience to cherish forever.
+            </motion.p>
+          </div>
+
+          {/* ── 3 Cards ── */}
+          <div className="events-grid">
+            {EVENTS.map((e, i) => (
+              <motion.div
+                key={i}
+                className="event-card"
+                initial={{ opacity: 0, y: 28 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: i * 0.12 + 0.2, duration: 0.7 }}
+              >
+                {/* Image */}
+                <div className="event-card-img-wrap">
+                  <div
+                    className="event-card-img"
+                    style={{ backgroundImage: `url('${e.image}')` }}
+                  />
+                </div>
+
+                {/* Floating Label */}
+                <div className="event-card-label">
+                  <p>{e.title}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+        </div>
+      </section>
+    </>
   );
 }

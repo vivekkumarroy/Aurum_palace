@@ -8,7 +8,28 @@ export default function AwardSection() {
 
   return (
     <section ref={ref} className="bg-white" style={{ paddingTop: 64, paddingBottom: 0 }}>
-
+      <style>{`
+        .award-img-outer {
+          padding: 0 200px;
+          box-sizing: border-box;
+        }
+        .award-img-ratio {
+          width: 100%;
+          aspect-ratio: 21 / 8;
+          position: relative;
+          background: #0a0500;
+        }
+        @media (max-width: 1023px) {
+          .award-img-outer { padding: 0 60px; }
+        }
+        @media (max-width: 767px) {
+          .award-img-outer { padding: 0 16px; }
+          .award-img-ratio {
+            aspect-ratio: unset;
+            height: 220px;
+          }
+        }
+      `}</style>
       {/* Heading */}
       <motion.div
         style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 20, marginBottom: 24, padding: "0 24px" }}
@@ -35,7 +56,7 @@ export default function AwardSection() {
 
       {/* Image with side padding */}
       <motion.div
-        style={{ padding: "0 200px", boxSizing: "border-box" }}
+        className="award-img-outer"
         initial={{ opacity: 0, y: 20 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ delay: 0.3, duration: 0.8 }}
@@ -43,12 +64,7 @@ export default function AwardSection() {
         <div style={{ width: "100%", position: "relative", overflow: "hidden" }}>
 
           {/* Grand illuminated hotel at night — full front view */}
-          <div style={{
-            width: "100%",
-            aspectRatio: "21 / 8",
-            position: "relative",
-            background: "#0a0500",
-          }}>
+          <div className="award-img-ratio">
             {/* Primary image */}
             <img
               src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=2560&q=100"

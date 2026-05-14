@@ -63,28 +63,35 @@ export default function RestaurantsSection() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
   
-  // Start at the middle copy (index N) for infinite scrolling
+  // Responsive check
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
   const [idx, setIdx] = useState(N);
   const [instant, setInstant] = useState(false);
 
-  // Constants for carousel sizing to perfectly center 2 cards with partial edges
-  const CARD_VW = 38; 
-  const GAP_VW = 1.5; 
-  const OFFSET_VW = 11.25; // (100 - (38*2) - 1.5) / 2 = 11.25vw left padding
+  // Responsive padding/sizing
+  const SIDE_VW = isMobile ? 4 : 11.25; 
+  const GAP_PX = isMobile ? 12 : 24; // Use px for gap to be safe
+  const CARD = isMobile ? `(100vw - ${SIDE_VW * 2}vw - ${GAP_PX * 2}px)` : `(38vw)`;
 
-  const getX = (i: number) => `calc(${OFFSET_VW}vw - ${i * (CARD_VW + GAP_VW)}vw)`;
+  function getX(i: number) {
+    return `calc(${SIDE_VW}vw - ${i} * (${CARD} + ${GAP_PX}px))`;
+  }
 
   const next = () => {
     setInstant(false);
     setIdx((p) => {
       const nextIdx = p + 1;
-      // Reached end of middle copy
       if (nextIdx >= N * 2) {
-        setTimeout(() => {
-          setInstant(true);
-          setIdx(N);
-        }, 700); // match transition duration
-        return nextIdx;
+        setTimeout(() => { setInstant(false); setIdx(N); }, 10);
+        setInstant(true);
+        return N - 1;
       }
       return nextIdx;
     });
@@ -94,199 +101,309 @@ export default function RestaurantsSection() {
     setInstant(false);
     setIdx((p) => {
       const nextIdx = p - 1;
-      // Reached start of middle copy
       if (nextIdx < N) {
-        setTimeout(() => {
-          setInstant(true);
-          setIdx(N * 2 - 1);
-        }, 700);
-        return nextIdx;
+        setTimeout(() => { setInstant(false); setIdx(N * 2 - 1); }, 10);
+        setInstant(true);
+        return N * 2;
       }
       return nextIdx;
     });
   };
 
   return (
-    <section className="bg-[#f8f7f5]" id="dining" style={{ paddingTop: 100, paddingBottom: 100, position: "relative", overflow: "hidden" }}>
-      
-      {/* Header Container - Pushed to the right to align with the first full card */}
-      <div style={{ width: "100%", paddingLeft: `${OFFSET_VW}vw`, paddingRight: `${OFFSET_VW}vw`, margin: "0 auto" }}>
+    <>
+      <style>{`
+        .resto-section {
+          background-color: #f8f7f5;
+          padding-top: 100px;
+          padding-bottom: 100px;
+          position: relative;
+          overflow: hidden;
+        }
         
-        {/* Header - Matching Exact Screenshots */}
-        <div ref={ref} style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", paddingBottom: 50 }}>
-          <motion.div
-            style={{ display: "flex", flexDirection: "column", gap: 8 }}
-            initial={{ opacity: 0, y: 16 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8 }}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
-              <div style={{ width: 80, height: 1, background: "#a0a0a0", flexShrink: 0 }} />
-              <span style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontSize: "clamp(2rem, 3.5vw, 2.6rem)",
-                fontWeight: 300, color: "#4a4540",
-                letterSpacing: "0.02em", textTransform: "uppercase",
-                lineHeight: 1,
-              }}>
-                OUR LEGENDARY
-              </span>
-            </div>
-            <h2 style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: "clamp(2rem, 3.5vw, 2.6rem)",
-              fontWeight: 300, color: "#4a4540",
-              letterSpacing: "0.02em", textTransform: "uppercase",
-              lineHeight: 1,
-              paddingLeft: 0, // Shifted left to sit directly under the grey line
-            }}>
-              RESTAURANT BRANDS
-            </h2>
-          </motion.div>
+        .resto-header-wrap {
+          max-width: 1320px;
+          margin: 0 auto;
+          padding-left: 11.25vw;
+          padding-right: 11.25vw;
+        }
 
-          <motion.p 
-            style={{ 
-              maxWidth: 400, 
-              fontFamily: "'Inter', sans-serif", 
-              fontSize: "0.95rem", 
-              color: "#6b6560", 
-              lineHeight: 1.6,
-              paddingTop: 4,
-              textAlign: "left"
-            }}
-            initial={{ opacity: 0 }}
-            animate={inView ? { opacity: 1 } : {}}
-            transition={{ delay: 0.3, duration: 0.8 }}
-          >
-            Step into the realm of our culinary legends where a symphony of flavours enchants your taste buds, ambience embraces you in a tapestry of elegance and the genuine warmth of our service leaves you feeling truly indulged.
-          </motion.p>
-        </div>
+        .resto-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          padding-bottom: 50px;
+          gap: 40px;
+        }
 
-      </div>
+        .resto-title-box {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          flex-shrink: 0;
+        }
 
-      {/* Full-width Carousel Container */}
-      <div style={{ position: "relative", width: "100%", overflow: "visible", marginTop: 20 }}>
+        .resto-title-line-group {
+          display: flex;
+          align-items: center;
+          gap: 24px;
+        }
+
+        .resto-title-line {
+          width: 80px;
+          height: 1px;
+          background: #a0a0a0;
+          flex-shrink: 0;
+        }
+
+        .resto-title-text {
+          font-family: 'Cormorant Garamond', serif;
+          font-size: clamp(2rem, 3.5vw, 2.6rem);
+          font-weight: 300;
+          color: #4a4540;
+          letter-spacing: 0.02em;
+          text-transform: uppercase;
+          line-height: 1;
+        }
+
+        .resto-subtitle {
+          max-width: 400px;
+          font-family: 'Inter', sans-serif;
+          font-size: 0.95rem;
+          color: #6b6560;
+          line-height: 1.6;
+          padding-top: 4px;
+          text-align: left;
+        }
+
+        .resto-img-wrap {
+          position: relative;
+          aspect-ratio: 1.5/1;
+          overflow: hidden;
+        }
+
+        .resto-info-box {
+          background: #fff;
+          padding: 16px 24px 18px 24px;
+          display: flex;
+          flex-direction: column;
+          text-align: left;
+          position: relative;
+          margin-top: -50px;
+          margin-left: 24px;
+          margin-right: 0;
+          box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+          border: 1px solid rgba(0,0,0,0.03);
+          z-index: 2;
+          min-height: 160px;
+        }
+
+        .resto-card-title {
+          font-family: 'Cormorant Garamond', serif;
+          font-size: 1.35rem;
+          font-weight: 400;
+          letter-spacing: 0.02em;
+          text-transform: uppercase;
+          color: #333;
+          line-height: 1.1;
+          margin-bottom: 6px;
+        }
+
+        .resto-card-desc {
+          font-family: 'Inter', sans-serif;
+          font-size: 0.78rem;
+          font-weight: 300;
+          color: #666;
+          line-height: 1.4;
+          margin-bottom: 12px;
+        }
+
+        .resto-card-more {
+          font-family: 'Inter', sans-serif;
+          font-size: 0.75rem;
+          font-weight: 500;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          color: #A88548;
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 0;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          margin-top: auto;
+        }
+
+        /* ── Arrows ── */
+        .resto-arrow {
+          position: absolute;
+          top: 35%;
+          transform: translateY(-50%);
+          z-index: 10;
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          border: 1px solid rgba(0,0,0,0.08);
+          background: #fff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          color: #333;
+          box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .resto-arrow-left { left: calc(11.25vw - 24px); }
+        .resto-arrow-right { right: calc(11.25vw - 24px); }
+
+        /* ── MOBILE (<768px) ── */
+        @media (max-width: 767px) {
+          .resto-section {
+            padding-top: 60px;
+            padding-bottom: 60px;
+          }
+          .resto-header-wrap {
+            padding-left: 20px;
+            padding-right: 20px;
+          }
+          .resto-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 20px;
+            padding-bottom: 30px;
+          }
+          .resto-title-line {
+            width: 40px;
+          }
+          .resto-subtitle {
+            max-width: 100%;
+            padding-top: 0;
+          }
+
+          /* Image sizing */
+          .resto-img-wrap {
+            aspect-ratio: unset;
+            height: 240px;
+          }
+          .resto-info-box {
+            margin-left: 16px;
+            padding: 16px;
+          }
+
+          /* Arrows positioned over the card like other sections */
+          .resto-arrow {
+            width: 36px;
+            height: 36px;
+            background: rgba(255,255,255,0.9);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            top: 45%;
+          }
+          .resto-arrow-left { left: 8px; }
+          .resto-arrow-right { right: 8px; }
+        }
+      `}</style>
+
+      <section className="resto-section" id="dining">
         
-        {/* Left Navigation Arrow */}
-        <button suppressHydrationWarning onClick={prev} style={{
-          position: "absolute", left: `calc(${OFFSET_VW}vw - 24px)`, top: "32%", transform: "translateY(-50%)",
-          zIndex: 10, width: 50, height: 50, borderRadius: "50%",
-          border: "1px solid rgba(0,0,0,0.08)", background: "#fff",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          cursor: "pointer", color: "#333",
-          transition: "transform 0.2s ease, box-shadow 0.2s ease",
-          boxShadow: "0 4px 15px rgba(0,0,0,0.08)",
-        }}
-        className="hover:scale-105"
-        >
-          <ChevronLeft size={22} strokeWidth={1.2} />
-        </button>
-
-        {/* Right Navigation Arrow */}
-        <button suppressHydrationWarning onClick={next} style={{
-          position: "absolute", right: `calc(${OFFSET_VW}vw - 24px)`, top: "32%", transform: "translateY(-50%)",
-          zIndex: 10, width: 50, height: 50, borderRadius: "50%",
-          border: "1px solid rgba(0,0,0,0.08)", background: "#fff",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          cursor: "pointer", color: "#333",
-          transition: "transform 0.2s ease, box-shadow 0.2s ease",
-          boxShadow: "0 4px 15px rgba(0,0,0,0.08)",
-        }}
-        className="hover:scale-105"
-        >
-          <ChevronRight size={22} strokeWidth={1.2} />
-        </button>
-
-        {/* Sliding Track */}
-        <div style={{ overflow: "hidden", paddingBottom: 60 }}>
-          <motion.div
-            style={{ 
-              display: "flex", 
-              width: "max-content",
-            }}
-            animate={{ x: getX(idx) }}
-            transition={instant ? { duration: 0 } : { duration: 0.7, ease: [0.25, 1, 0.35, 1] }}
-          >
-            {RESTAURANTS.map((r, i) => (
-              <div
-                key={i}
-                className="group"
-                style={{ 
-                  width: `${CARD_VW}vw`, 
-                  marginRight: `${GAP_VW}vw`,
-                  flexShrink: 0, 
-                  cursor: "pointer", 
-                  display: "flex", 
-                  flexDirection: "column",
-                  position: "relative",
-                  opacity: (i >= idx && i < idx + 2) ? 1 : 0.35,
-                  transition: "opacity 0.6s ease"
-                }}
-              >
-                {/* Image */}
-                <div style={{ position: "relative", aspectRatio: "1.5/1", overflow: "hidden" }}>
-                  <div
-                    style={{
-                      position: "absolute", inset: 0,
-                      backgroundImage: `url('${r.image}')`,
-                      backgroundSize: "cover", backgroundPosition: "center",
-                      transition: "transform 0.8s cubic-bezier(0.25, 1, 0.35, 1)",
-                    }}
-                    className="group-hover:scale-[1.04]"
-                  />
-                </div>
-
-                {/* Text Box - Floating Overlap */}
-                <div style={{
-                  background: "#fff",
-                  padding: "16px 24px 18px 24px", // Extremely reduced padding
-                  display: "flex", flexDirection: "column",
-                  textAlign: "left",
-                  position: "relative",
-                  marginTop: "-50px", // Overlaps the image
-                  marginLeft: "24px", // Indented from left
-                  marginRight: "0",   // Flush with right edge
-                  boxShadow: "0 10px 40px rgba(0,0,0,0.08)", // Soft shadow
-                  border: "1px solid rgba(0,0,0,0.03)",
-                  zIndex: 2,
-                }}>
-                  <p style={{
-                    fontFamily: "'Cormorant Garamond', serif", fontSize: "1.35rem", // Smaller title
-                    fontWeight: 400, letterSpacing: "0.02em",
-                    textTransform: "uppercase", color: "#333",
-                    lineHeight: 1.1, marginBottom: 6, // Very small margin
-                  }}>
-                    {r.name}
-                  </p>
-                  
-                  <p style={{
-                    fontFamily: "'Inter', sans-serif", fontSize: "0.78rem", // Smaller text
-                    fontWeight: 300, color: "#666",
-                    lineHeight: 1.4, marginBottom: 12, // Very small margin
-                  }}>
-                    {r.desc}<span style={{ color: "#A88548", letterSpacing: "-1px" }}>...»</span>
-                  </p>
-                  
-                  <button suppressHydrationWarning style={{
-                    fontFamily: "'Inter', sans-serif", fontSize: "0.75rem",
-                    fontWeight: 500, letterSpacing: "0.15em",
-                    textTransform: "uppercase", color: "#A88548",
-                    background: "none", border: "none", cursor: "pointer",
-                    padding: 0, display: "flex", alignItems: "center", gap: 6,
-                    marginTop: "auto",
-                  }}>
-                    <span style={{ borderBottom: "1px solid #A88548", paddingBottom: "2px" }}>MORE</span> 
-                    <span style={{ fontSize: "1rem", fontWeight: 300, transform: "translateY(-1px)" }}>›</span>
-                  </button>
-                </div>
+        {/* Header Container */}
+        <div className="resto-header-wrap">
+          <div ref={ref} className="resto-header">
+            <motion.div
+              className="resto-title-box"
+              initial={{ opacity: 0, y: 16 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8 }}
+            >
+              <div className="resto-title-line-group">
+                <div className="resto-title-line" />
+                <span className="resto-title-text">
+                  OUR LEGENDARY
+                </span>
               </div>
-            ))}
-          </motion.div>
+              <h2 className="resto-title-text" style={{ paddingLeft: 0 }}>
+                RESTAURANT BRANDS
+              </h2>
+            </motion.div>
+
+            <motion.p 
+              className="resto-subtitle"
+              initial={{ opacity: 0 }}
+              animate={inView ? { opacity: 1 } : {}}
+              transition={{ delay: 0.3, duration: 0.8 }}
+            >
+              Step into the realm of our culinary legends where a symphony of flavours enchants your taste buds, ambience embraces you in a tapestry of elegance and the genuine warmth of our service leaves you feeling truly indulged.
+            </motion.p>
+          </div>
         </div>
-      </div>
-    </section>
+
+        {/* Full-width Carousel Container */}
+        <div style={{ position: "relative", width: "100%", overflow: "visible", marginTop: 20 }}>
+          
+          {/* Left Navigation Arrow */}
+          <button suppressHydrationWarning onClick={prev} className="resto-arrow resto-arrow-left">
+            <ChevronLeft size={22} strokeWidth={1.2} />
+          </button>
+
+          {/* Right Navigation Arrow */}
+          <button suppressHydrationWarning onClick={next} className="resto-arrow resto-arrow-right">
+            <ChevronRight size={22} strokeWidth={1.2} />
+          </button>
+
+          {/* Sliding Track */}
+          <div style={{ overflow: "hidden", paddingBottom: 60 }}>
+            <motion.div
+              style={{ display: "flex", width: "max-content", gap: GAP_PX }}
+              animate={{ x: getX(idx) }}
+              transition={instant ? { duration: 0 } : { duration: 0.55, ease: [0.25, 1, 0.35, 1] }}
+            >
+              {RESTAURANTS.map((r, i) => (
+                <div
+                  key={i}
+                  className="group"
+                  style={{ 
+                    width: `calc(${CARD})`, 
+                    flexShrink: 0, 
+                    cursor: "pointer", 
+                    display: "flex", 
+                    flexDirection: "column",
+                    position: "relative",
+                    opacity: isMobile ? 1 : ((i >= idx && i < idx + 2) ? 1 : 0.35),
+                    transition: "opacity 0.6s ease"
+                  }}
+                >
+                  {/* Image */}
+                  <div className="resto-img-wrap">
+                    <div
+                      style={{
+                        position: "absolute", inset: 0,
+                        backgroundImage: `url('${r.image}')`,
+                        backgroundSize: "cover", backgroundPosition: "center",
+                        transition: "transform 0.8s cubic-bezier(0.25, 1, 0.35, 1)",
+                      }}
+                      className="group-hover:scale-[1.04]"
+                    />
+                  </div>
+
+                  {/* Text Box - Floating Overlap */}
+                  <div className="resto-info-box">
+                    <p className="resto-card-title">{r.name}</p>
+                    
+                    <p className="resto-card-desc">
+                      {r.desc}<span style={{ color: "#A88548", letterSpacing: "-1px" }}>...»</span>
+                    </p>
+                    
+                    <button suppressHydrationWarning className="resto-card-more">
+                      <span style={{ borderBottom: "1px solid #A88548", paddingBottom: "2px" }}>MORE</span> 
+                      <span style={{ fontSize: "1rem", fontWeight: 300, transform: "translateY(-1px)" }}>›</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
-
-
-
