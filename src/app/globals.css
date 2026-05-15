@@ -2,18 +2,19 @@
 @import "tailwindcss";
 
 :root {
-  --gold: #C6A664;
-  --gold2: #b8954e;
-  --dark: #1a1a1a;
-  --gray: #6b6560;
-  --border: #e8e2d9;
+  --gold: #D4AF37;
+  --gold2: #B8860B;
+  --dark: #0A0F1A;
+  --dark-glass: rgba(10, 15, 26, 0.85);
+  --gray: #A0AAB5;
+  --border: rgba(212, 175, 55, 0.15);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { overflow-x: hidden; }
 body {
-  background: #fff;
-  color: var(--dark);
+  background: var(--dark);
+  color: #F8F5F0;
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
@@ -31,7 +32,7 @@ body {
   font-family: 'Playfair Display', serif;
   font-size: clamp(1.4rem, 2.6vw, 2rem);
   font-weight: 300;
-  color: #5a5550;
+  color: #F8F5F0;
   line-height: 1.1;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -48,7 +49,7 @@ body {
   display: block;
   width: 32px;
   height: 1px;
-  background: #9a9490;
+  background: var(--gold);
   margin-top: 18px;
   flex-shrink: 0;
 }
@@ -66,7 +67,7 @@ body {
   display: block;
   width: 48px;
   height: 1px;
-  background: var(--dark);
+  background: var(--gold);
   flex-shrink: 0;
 }
 
@@ -105,7 +106,7 @@ body {
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--dark);
+  color: #F8F5F0;
 }
 
 /* ── Buttons ── */
@@ -183,7 +184,7 @@ body {
 .carousel-arrow.dark:hover { background: #fff; }
 
 /* ── Backgrounds ── */
-.bg-explore    { background: #e8eef0; }
+.bg-explore    { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); }
 .bg-exclusively { 
   background: 
     linear-gradient(to right, rgba(8,20,18,0.97) 0%, rgba(13,55,45,0.75) 45%, rgba(20,75,58,0.35) 100%),

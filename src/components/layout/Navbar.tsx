@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Search, Menu, X } from "lucide-react";
+import Link from "next/link";
 
 const NAV_LINKS = [
   { label: "Destinations", sub: ["Udaipur", "Jaipur", "Goa", "Mumbai", "Maldives", "Dubai", "London"] },
@@ -269,12 +270,9 @@ export default function Navbar() {
             <button className={`nav-link ${scrolled ? "dark" : ""}`}>
               LOGIN / JOIN
             </button>
-            <button
-              onClick={() => document.querySelector("#booking")?.scrollIntoView({ behavior: "smooth" })}
-              className="btn-book"
-            >
+            <Link href="/booking" className="btn-book text-center inline-block">
               BOOK A STAY
-            </button>
+            </Link>
           </div>
 
           {/* Mobile Menu Toggle Button */}
@@ -366,16 +364,14 @@ export default function Navbar() {
               </div>
 
               <div className="mobile-menu-footer">
-                <button 
-                  className="w-full btn-book" 
+                <Link 
+                  href="/booking"
+                  className="w-full btn-book text-center inline-block" 
                   style={{ padding: "14px", fontSize: "0.85rem", letterSpacing: "0.2em" }}
-                  onClick={() => {
-                    setMobileOpen(false);
-                    document.querySelector("#booking")?.scrollIntoView({ behavior: "smooth" });
-                  }}
+                  onClick={() => setMobileOpen(false)}
                 >
                   BOOK A STAY
-                </button>
+                </Link>
                 
                 <div className="mobile-socials">
                   <a href="#">

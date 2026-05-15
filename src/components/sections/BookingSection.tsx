@@ -2,6 +2,7 @@
 import { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { Calendar, Users, MapPin, Sparkles, ChevronDown, Check } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const DESTINATIONS = ["Udaipur — Lake Palace", "Jaipur — Pink City", "Jodhpur — Blue City", "Goa — Coastal Retreat", "Maldives — Island Resort", "Dubai — Urban Luxury"];
 const SUITES = ["Heritage Palace Room", "Royal Maharaja Suite", "Ocean Villa", "Sky Penthouse", "Presidential Suite"];
@@ -37,7 +38,7 @@ export default function BookingSection() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
   const [guests, setGuests] = useState(2);
-  const [done, setDone] = useState(false);
+  const router = useRouter();
 
   return (
     <section id="booking" className="section bg-[#080808] relative overflow-hidden">
@@ -78,16 +79,7 @@ export default function BookingSection() {
 
           <motion.div className="glass-dark rounded-2xl p-8 border border-[#D4AF37]/12"
             initial={{ opacity: 0, x: 30 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.85, delay: 0.2 }}>
-            {done ? (
-              <motion.div className="text-center py-12" initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }}>
-                <div className="w-16 h-16 rounded-full bg-[#D4AF37]/14 border border-[#D4AF37]/32 flex items-center justify-center mx-auto mb-4">
-                  <Sparkles size={26} className="text-[#D4AF37]" />
-                </div>
-                <h3 className="font-playfair text-2xl text-[#F8F5F0] mb-2">Request Received</h3>
-                <p className="font-inter text-sm text-[#F8F5F0]/42">Our concierge will contact you within 2 hours to confirm your reservation.</p>
-              </motion.div>
-            ) : (
-              <form onSubmit={e => { e.preventDefault(); setDone(true); setTimeout(() => setDone(false), 5000); }} className="space-y-6">
+              <form onSubmit={e => { e.preventDefault(); router.push('/booking'); }} className="space-y-6">
                 <div>
                   <p className="font-playfair text-xl text-[#F8F5F0] mb-0.5">Reserve Your Suite</p>
                   <p className="font-inter text-xs text-[#F8F5F0]/32">Best rate guaranteed · Instant confirmation</p>
@@ -125,7 +117,6 @@ export default function BookingSection() {
                 <button type="submit" className="w-full btn-gold py-4 text-sm">Check Availability & Reserve</button>
                 <p className="font-inter text-xs text-[#F8F5F0]/22 text-center">No payment required · Free cancellation up to 48 hours</p>
               </form>
-            )}
           </motion.div>
         </div>
       </div>
