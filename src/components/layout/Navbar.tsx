@@ -17,7 +17,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
-  const [isSignup, setIsSignup] = useState(false);
+  const [authView, setAuthView] = useState<"login" | "signup" | "forgot">("login");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const pathname = usePathname();
   
@@ -345,17 +345,20 @@ export default function Navbar() {
               <div style={{ padding: "32px" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 28 }}>
                   <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 26, color: "#F0EDE8", margin: 0, fontWeight: 400 }}>
-                    {isSignup ? "Join Aurum" : "Sign In"}
+                    {authView === "signup" ? "Join Aurum" : authView === "forgot" ? "Reset Password" : "Sign In"}
                   </h3>
-                  <button onClick={() => setLoginOpen(false)} style={{ background: "none", border: "none", color: "rgba(255,255,255,0.4)", cursor: "pointer", display: "flex", padding: 4 }}>
+                  <button 
+                    onClick={() => { setLoginOpen(false); setAuthView("login"); }} 
+                    style={{ background: "none", border: "none", color: "rgba(255,255,255,0.4)", cursor: "pointer", display: "flex", padding: 4 }}
+                  >
                     <X size={20} />
                   </button>
                 </div>
 
-                {isSignup && (
+                {authView === "signup" && (
                   <div style={{ marginBottom: 16 }}>
                     <p style={{ fontFamily: "Inter", fontSize: 10, fontWeight: 600, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.40)", marginBottom: 8 }}>Full Name</p>
-                    <div style={{ background: "#1E2130", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, transition: "border-color 0.2s" }}>
+                    <div style={{ background: "#1E2130", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8 }}>
                       <input type="text" placeholder="Jane Doe" style={{ width: "100%", background: "transparent", border: "none", outline: "none", padding: "14px 16px", color: "#F0EDE8", fontFamily: "Inter", fontSize: 14 }} />
                     </div>
                   </div>
@@ -368,35 +371,66 @@ export default function Navbar() {
                   </div>
                 </div>
 
-                <div style={{ marginBottom: 28 }}>
-                  <p style={{ fontFamily: "Inter", fontSize: 10, fontWeight: 600, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.40)", marginBottom: 8 }}>Password</p>
-                  <div style={{ background: "#1E2130", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8 }}>
-                    <input type="password" placeholder="••••••••" style={{ width: "100%", background: "transparent", border: "none", outline: "none", padding: "14px 16px", color: "#F0EDE8", fontFamily: "Inter", fontSize: 14, letterSpacing: 2 }} />
+                {authView !== "forgot" && (
+                  <div style={{ marginBottom: 28 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                      <p style={{ fontFamily: "Inter", fontSize: 10, fontWeight: 600, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.40)", margin: 0 }}>Password</p>
+                      {authView === "login" && (
+                        <button 
+                          type="button"
+                          onClick={() => setAuthView("forgot")}
+                          style={{ background: "none", border: "none", color: "#D4AF37", fontFamily: "Inter", fontSize: 10, fontWeight: 600, letterSpacing: "0.05em", cursor: "pointer", padding: "0 4px" }}
+                        >
+                          Forgot?
+                        </button>
+                      )}
+                    </div>
+                    <div style={{ background: "#1E2130", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8 }}>
+                      <input type="password" placeholder="••••••••" style={{ width: "100%", background: "transparent", border: "none", outline: "none", padding: "14px 16px", color: "#F0EDE8", fontFamily: "Inter", fontSize: 14, letterSpacing: 2 }} />
+                    </div>
                   </div>
-                </div>
+                )}
+
+                {authView === "forgot" && (
+                   <p style={{ fontFamily: "Inter", fontSize: 12, color: "rgba(255,255,255,0.45)", lineHeight: 1.6, marginBottom: 24 }}>
+                     Enter your email address and we'll send you a link to reset your password.
+                   </p>
+                )}
 
                 <button 
                   onClick={() => {
-                    setIsLoggedIn(true);
-                    setLoginOpen(false);
+                    if (authView === "forgot") {
+                      alert("Reset link sent to your email!");
+                      setAuthView("login");
+                    } else {
+                      setIsLoggedIn(true);
+                      setLoginOpen(false);
+                      setAuthView("login");
+                    }
                   }}
                   style={{ width: "100%", padding: "16px", background: "#D4AF37", border: "none", borderRadius: 8, color: "#0A0F14", fontFamily: "Inter", fontSize: 12, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", cursor: "pointer", marginBottom: 24, transition: "background 0.2s" }}
                 >
-                  {isSignup ? "Create Account" : "Sign In"}
+                  {authView === "forgot" ? "Send Reset Link" : authView === "signup" ? "Create Account" : "Sign In"}
                 </button>
 
                 <div style={{ textAlign: "center", display: "flex", flexDirection: "column", gap: 14 }}>
-                  {!isSignup && (
-                    <button style={{ background: "none", border: "none", color: "rgba(255,255,255,0.4)", fontFamily: "Inter", fontSize: 12, cursor: "pointer", textDecoration: "underline", textUnderlineOffset: 4 }}>
-                      Forgot your password?
+                  {authView === "forgot" ? (
+                    <button 
+                      type="button"
+                      onClick={() => setAuthView("login")} 
+                      style={{ background: "none", border: "none", color: "#D4AF37", fontFamily: "Inter", fontSize: 12, cursor: "pointer", fontWeight: 500 }}
+                    >
+                      Back to Sign In
+                    </button>
+                  ) : (
+                    <button 
+                      type="button"
+                      onClick={() => setAuthView(authView === "login" ? "signup" : "login")} 
+                      style={{ background: "none", border: "none", color: "#D4AF37", fontFamily: "Inter", fontSize: 12, cursor: "pointer", fontWeight: 500 }}
+                    >
+                      {authView === "login" ? "Don't have an account? Join Now" : "Already have an account? Sign In"}
                     </button>
                   )}
-                  <button 
-                    onClick={() => setIsSignup(!isSignup)} 
-                    style={{ background: "none", border: "none", color: "#D4AF37", fontFamily: "Inter", fontSize: 12, cursor: "pointer", fontWeight: 500 }}
-                  >
-                    {isSignup ? "Already have an account? Sign In" : "Don't have an account? Join Now"}
-                  </button>
                 </div>
               </div>
             </motion.div>
