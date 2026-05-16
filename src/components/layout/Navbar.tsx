@@ -19,6 +19,9 @@ export default function Navbar() {
   const [loginOpen, setLoginOpen] = useState(false);
   const [authView, setAuthView] = useState<"login" | "signup" | "forgot">("login");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
+  const [name, setName] = useState("");
   const pathname = usePathname();
   
   // Force dark text on booking route
@@ -359,7 +362,13 @@ export default function Navbar() {
                   <div style={{ marginBottom: 16 }}>
                     <p style={{ fontFamily: "Inter", fontSize: 10, fontWeight: 600, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.40)", marginBottom: 8 }}>Full Name</p>
                     <div style={{ background: "#1E2130", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8 }}>
-                      <input type="text" placeholder="Jane Doe" style={{ width: "100%", background: "transparent", border: "none", outline: "none", padding: "14px 16px", color: "#F0EDE8", fontFamily: "Inter", fontSize: 14 }} />
+                      <input 
+                        type="text" 
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="Jane Doe" 
+                        style={{ width: "100%", background: "transparent", border: "none", outline: "none", padding: "14px 16px", color: "#F0EDE8", fontFamily: "Inter", fontSize: 14 }} 
+                      />
                     </div>
                   </div>
                 )}
@@ -367,7 +376,13 @@ export default function Navbar() {
                 <div style={{ marginBottom: 16 }}>
                   <p style={{ fontFamily: "Inter", fontSize: 10, fontWeight: 600, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.40)", marginBottom: 8 }}>Email Address</p>
                   <div style={{ background: "#1E2130", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8 }}>
-                    <input type="email" placeholder="name@example.com" style={{ width: "100%", background: "transparent", border: "none", outline: "none", padding: "14px 16px", color: "#F0EDE8", fontFamily: "Inter", fontSize: 14 }} />
+                    <input 
+                      type="email" 
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="name@example.com" 
+                      style={{ width: "100%", background: "transparent", border: "none", outline: "none", padding: "14px 16px", color: "#F0EDE8", fontFamily: "Inter", fontSize: 14 }} 
+                    />
                   </div>
                 </div>
 
@@ -386,7 +401,13 @@ export default function Navbar() {
                       )}
                     </div>
                     <div style={{ background: "#1E2130", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8 }}>
-                      <input type="password" placeholder="••••••••" style={{ width: "100%", background: "transparent", border: "none", outline: "none", padding: "14px 16px", color: "#F0EDE8", fontFamily: "Inter", fontSize: 14, letterSpacing: 2 }} />
+                      <input 
+                        type="password" 
+                        value={pass}
+                        onChange={(e) => setPass(e.target.value)}
+                        placeholder="••••••••" 
+                        style={{ width: "100%", background: "transparent", border: "none", outline: "none", padding: "14px 16px", color: "#F0EDE8", fontFamily: "Inter", fontSize: 14, letterSpacing: 2 }} 
+                      />
                     </div>
                   </div>
                 )}
@@ -400,15 +421,39 @@ export default function Navbar() {
                 <button 
                   onClick={() => {
                     if (authView === "forgot") {
+                      if (!email) { alert("Please enter your email"); return; }
                       alert("Reset link sent to your email!");
                       setAuthView("login");
+                    } else if (authView === "signup") {
+                      if (!email || pass.length < 8 || !name) { alert("Please fill all fields and ensure password is at least 8 characters"); return; }
+                      setIsLoggedIn(true);
+                      setLoginOpen(false);
+                      setAuthView("login");
                     } else {
+                      if (!email || pass.length < 8) { alert("Please enter email and at least 8 characters for password"); return; }
                       setIsLoggedIn(true);
                       setLoginOpen(false);
                       setAuthView("login");
                     }
                   }}
-                  style={{ width: "100%", padding: "16px", background: "#D4AF37", border: "none", borderRadius: 8, color: "#0A0F14", fontFamily: "Inter", fontSize: 12, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", cursor: "pointer", marginBottom: 24, transition: "background 0.2s" }}
+                  disabled={(authView === "login" && (!email || pass.length < 8)) || (authView === "signup" && (!email || pass.length < 8 || !name)) || (authView === "forgot" && !email)}
+                  style={{ 
+                    width: "100%", 
+                    padding: "16px", 
+                    background: ((authView === "login" && (!email || pass.length < 8)) || (authView === "signup" && (!email || pass.length < 8 || !name)) || (authView === "forgot" && !email)) ? "rgba(212,175,55,0.2)" : "#D4AF37", 
+                    border: "none", 
+                    borderRadius: 8, 
+                    color: "#0A0F14", 
+                    fontFamily: "Inter", 
+                    fontSize: 12, 
+                    fontWeight: 700, 
+                    letterSpacing: "0.15em", 
+                    textTransform: "uppercase", 
+                    cursor: ((authView === "login" && (!email || pass.length < 8)) || (authView === "signup" && (!email || pass.length < 8 || !name)) || (authView === "forgot" && !email)) ? "not-allowed" : "pointer", 
+                    marginBottom: 24, 
+                    transition: "background 0.2s",
+                    opacity: ((authView === "login" && (!email || pass.length < 8)) || (authView === "signup" && (!email || pass.length < 8 || !name)) || (authView === "forgot" && !email)) ? 0.5 : 1
+                  }}
                 >
                   {authView === "forgot" ? "Send Reset Link" : authView === "signup" ? "Create Account" : "Sign In"}
                 </button>
