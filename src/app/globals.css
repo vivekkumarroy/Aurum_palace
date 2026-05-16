@@ -1,6 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,200;0,300;0,400;0,500;0,600;1,200;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
+/* ── Tailwind v4: Register font families & brand color as theme tokens ── */
+@theme {
+  --font-inter:     'Inter', sans-serif;
+  --font-playfair:  'Playfair Display', serif;
+  --font-cormorant: 'Cormorant Garamond', serif;
+  --font-manrope:   'Manrope', sans-serif;
+  --color-gold:     #D4AF37;
+}
+
 :root {
   --gold: #D4AF37;
   --gold2: #B8860B;
@@ -189,4 +198,254 @@ body {
   background: 
     linear-gradient(to right, rgba(8,20,18,0.97) 0%, rgba(13,55,45,0.75) 45%, rgba(20,75,58,0.35) 100%),
     url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600&q=80') right/cover no-repeat;
+}
+
+/* ── Impeccable Booking Engine Styles (Light Theme) ── */
+@keyframes slowPan {
+  0% { transform: scale(1) translate(0, 0); }
+  50% { transform: scale(1.05) translate(-1%, -1%); }
+  100% { transform: scale(1) translate(0, 0); }
+}
+
+.bg-cinematic {
+  animation: slowPan 40s ease-in-out infinite;
+}
+
+.input-impeccable {
+  background: transparent;
+  border-bottom: 1px solid rgba(0,0,0,0.15);
+  padding-bottom: 8px;
+  color: #1a1a1a;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.4s ease;
+}
+
+.input-impeccable:focus {
+  border-bottom-color: var(--gold);
+}
+
+.input-impeccable::placeholder {
+  color: rgba(0,0,0,0.3);
+  transition: opacity 0.3s ease;
+}
+
+.input-impeccable:focus::placeholder {
+  opacity: 0;
+}
+
+.glass-impeccable {
+  background: rgba(253, 252, 249, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.8);
+}
+
+.input-impeccable-dark {
+  background: transparent;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+  padding-bottom: 8px;
+  color: #F8F5F0;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.4s ease;
+}
+
+.input-impeccable-dark:focus {
+  border-bottom-color: var(--gold);
+}
+
+.input-impeccable-dark::placeholder {
+  color: rgba(255,255,255,0.4);
+  transition: opacity 0.3s ease;
+}
+
+.input-impeccable-dark:focus::placeholder {
+  opacity: 0;
+}
+
+.glass-impeccable-dark {
+  background: rgba(10, 15, 26, 0.6);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   BOOKING ENGINE — Force dark styling on native form elements
+   (overrides browser UA styles which ignore Tailwind bg utilities)
+════════════════════════════════════════════════════════════════════ */
+
+/* Dark booking panel card */
+.bk-panel {
+  background: #111620;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 1rem;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+}
+
+/* Input / Select wrapper */
+.bk-field {
+  position: relative;
+  background: #1E2130;
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.bk-field:focus-within {
+  border-color: rgba(212,175,55,0.5);
+}
+
+/* Inputs inside bk-field */
+.bk-input {
+  width: 100%;
+  background: transparent;
+  padding: 12px 16px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: #F0EDE8;
+  outline: none;
+  border: none;
+  color-scheme: dark;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.bk-input::placeholder { color: rgba(240,237,232,0.25); }
+
+/* Placeholder color for all inputs/textareas inside bk-field */
+.bk-field input::placeholder,
+.bk-field textarea::placeholder { color: rgba(240,237,232,0.22); }
+.bk-field input, .bk-field textarea { color-scheme: dark; }
+
+
+/* Select inside bk-field */
+.bk-select {
+  width: 100%;
+  background: transparent;
+  padding: 12px 36px 12px 16px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: #F0EDE8;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.bk-select option {
+  background: #1E2130;
+  color: #F0EDE8;
+}
+
+/* Date input chrome fix */
+input[type="date"].bk-input::-webkit-calendar-picker-indicator {
+  filter: invert(0.7);
+  cursor: pointer;
+  opacity: 0.5;
+}
+
+/* Guest counter row */
+.bk-counter-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #1E2130;
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 0.5rem;
+  padding: 14px 20px;
+}
+
+/* Counter +/- button */
+.bk-counter-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.20);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.45);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+  flex-shrink: 0;
+}
+.bk-counter-btn:hover {
+  border-color: rgba(255,255,255,0.5);
+  color: #fff;
+}
+
+/* Suite selection card */
+.bk-suite-card {
+  text-align: left;
+  padding: 16px;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: #1E2130;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.bk-suite-card:hover    { border-color: rgba(255,255,255,0.22); }
+.bk-suite-card.selected { border-color: #D4AF37; }
+
+/* Section micro-label */
+.bk-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #D4AF37;
+  margin-bottom: 12px;
+}
+
+/* Field micro-label */
+.bk-field-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.40);
+  margin-bottom: 6px;
+}
+
+/* Reserve Now button (sidebar) */
+.bk-reserve-btn {
+  width: 100%;
+  background: #E8E4DC;
+  color: #0A0F14;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 14px;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background 0.2s;
+  margin-bottom: 12px;
+}
+.bk-reserve-btn:hover    { background: #fff; }
+.bk-reserve-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* Step connector line */
+.bk-step-line {
+  height: 1px;
+  background: rgba(255,255,255,0.10);
+  flex-shrink: 0;
+  flex: 1;
+  margin: 0 12px;
 }

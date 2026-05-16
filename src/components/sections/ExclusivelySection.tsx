@@ -2,51 +2,60 @@
 import { useRef, useState } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
 
 const SLIDES = [
   {
+    id: "perfect-staycations",
     label: "PERFECT STAYCATIONS",
     image: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=1200&q=85",
     title: "PERFECT STAYCATIONS – SUMMER ESCAPES",
     desc: "Escape into brighter days without stepping out of your city. Enjoy stays designed for comfort and the simple joy of being away, yet beautifully close to home.",
   },
   {
+    id: "family-escapes",
     label: "FAMILY ESCAPES",
     image: "/family_hotel_sofa.png",
     title: "FAMILY RETREATS",
     desc: "Create unforgettable memories with your loved ones in our spacious family suites. Reconnect and relax in the elegant ambiance of our grand lobby.",
   },
   {
+    id: "game-room",
     label: "GAME ROOM FUN",
     image: "/playing_billiards.png",
     title: "LEISURE & ENTERTAINMENT",
     desc: "Challenge your friends to a game of pool in our lively, luxurious game room. The perfect place to unwind and socialize during your stay.",
   },
   {
+    id: "ocean-views",
     label: "OCEAN VIEWS",
     image: "/luxury_room_view.png",
     title: "STUNNING OCEAN VIEWS",
     desc: "Wake up to breathtaking ocean panoramas from your private balcony. Witness glorious sunsets that paint the sky in vibrant, unforgettable colors.",
   },
   {
+    id: "holidays",
     label: "AURUM PALACE HOLIDAYS",
     image: "https://images.unsplash.com/photo-1586105251261-72a756497a11?w=1200&q=85",
     title: "AURUM PALACE HOLIDAYS",
     desc: "Go beyond the ordinary and craft enduring memories with a perfectly curated Aurum Palace Holiday.",
   },
   {
+    id: "heritage-escape",
     label: "ROYAL HERITAGE",
     image: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=1200&q=85",
     title: "ROYAL HERITAGE ESCAPE",
     desc: "Step into the grandeur of India's most iconic palaces. Every corridor whispers stories of royalty and timeless elegance.",
   },
   {
+    id: "epic-dining",
     label: "FINE DINING",
     image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=85",
     title: "EPICURE – FINE DINING",
     desc: "A world of benefits designed to indulge with member-only savings, unique vouchers, exclusive benefits and more.",
   },
   {
+    id: "spa-wellness",
     label: "SPA & WELLNESS",
     image: "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?w=1200&q=85",
     title: "AURUM WELLNESS CIRCLE",
@@ -284,9 +293,9 @@ export default function ExclusivelySection() {
                 <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "0.78rem", color: "#6b6560", lineHeight: 1.6, maxWidth: 480, margin: "0 auto 12px" }}>
                   {slide.desc}
                 </p>
-                <button suppressHydrationWarning style={{ fontFamily: "'Inter', sans-serif", fontSize: "0.72rem", fontWeight: 400, letterSpacing: "0.1em", textTransform: "uppercase", color: "#C6A664", background: "none", border: "none", cursor: "pointer" }}>
+                <Link href={`/experience/${slide.id}`} style={{ textDecoration: "none", fontFamily: "'Inter', sans-serif", fontSize: "0.72rem", fontWeight: 400, letterSpacing: "0.1em", textTransform: "uppercase", color: "#C6A664" }}>
                   MORE ›
-                </button>
+                </Link>
               </div>
             </div>
 

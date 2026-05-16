@@ -2,54 +2,65 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
 
 const BASE_RESTAURANTS = [
   {
+    id: "machan",
     name: "MACHAN",
     desc: "Presenting a delightful blend of earthy simplicity and urban sophistication, Machan invites its guests to enjoy a diverse bill of fare in the joyful e",
     image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=85",
   },
   {
+    id: "loya",
     name: "LOYA",
     desc: "LOYA takes its diners on a gastronomic journey through North India's diverse landscape, blending flavours from the Himalayan foothills, Punjab's flat",
     image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=85",
   },
   {
+    id: "golden-dragon",
     name: "GOLDEN DRAGON",
     desc: "From its first location at The Aurum Palace, Mumbai, Golden Dragon has introduced guests to rarefied, divine experiences that are unparalleled. Kn",
     image: "https://images.unsplash.com/photo-1551218808-94e220e084d2?w=800&q=85",
   },
   {
+    id: "wasabi",
     name: "WASABI BY MORIMOTO",
     desc: "Wasabi by Morimoto offers its guests authentic Japanese culinary treasures from the repertoire of Iron Chef Morimoto. The ingredients, including seafo",
     image: "https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=800&q=85",
   },
   {
+    id: "bombay-brasserie",
     name: "BOMBAY BRASSERIE",
     desc: "Ever since its inception in 1982, Bombay Brasserie has been a showcase of diverse Indian flavours, textures and fragrances that all reflect in Bombay'",
     image: "https://images.unsplash.com/photo-1560624052-449f5ddf0c31?w=800&q=85",
   },
   {
+    id: "thai-pavilion",
     name: "THAI PAVILION",
     desc: "The first Thai restaurant in India continues to be a pioneer in serving authentic cuisine from the royal kitchens of Thailand, crafted with the finest",
     image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=85",
   },
   {
+    id: "southern-spice",
     name: "SOUTHERN SPICE",
     desc: "Experience the ultimate culinary journey through the four southern states of India, offering an array of forgotten recipes from ancestral kitchens",
     image: "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=800&q=85",
   },
   {
+    id: "shamiana",
     name: "SHAMIANA",
     desc: "The original coffee shop of the city, Shamiana offers an all-day dining experience featuring an eclectic menu of Indian and international favourites",
     image: "https://images.unsplash.com/photo-1544148103-0773bf10d330?w=800&q=85",
   },
   {
+    id: "blue-ginger",
     name: "BLUE GINGER",
     desc: "India's first Vietnamese restaurant, Blue Ginger offers a vibrant dining experience with fresh, delicate flavours and an enchanting open-air setting",
     image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=800&q=85",
   },
   {
+    id: "varq",
     name: "VARQ",
     desc: "An elegant Indian restaurant that seamlessly blends traditional flavours with modern presentation, creating a truly unforgettable dining experience",
     image: "https://images.unsplash.com/photo-1505253758473-96b7015fcd40?w=800&q=85",
@@ -393,10 +404,10 @@ export default function RestaurantsSection() {
                       {r.desc}<span style={{ color: "#A88548", letterSpacing: "-1px" }}>...»</span>
                     </p>
                     
-                    <button suppressHydrationWarning className="resto-card-more">
+                    <Link href={`/experience/${r.id}`} style={{textDecoration: "none"}} className="resto-card-more">
                       <span style={{ borderBottom: "1px solid #A88548", paddingBottom: "2px" }}>MORE</span> 
                       <span style={{ fontSize: "1rem", fontWeight: 300, transform: "translateY(-1px)" }}>›</span>
-                    </button>
+                    </Link>
                   </div>
                 </div>
               ))}

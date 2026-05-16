@@ -10,7 +10,6 @@ import RestaurantsSection from "@/components/sections/RestaurantsSection";
 import EventsSection from "@/components/sections/EventsSection";
 import WellnessBanner from "@/components/sections/WellnessBanner";
 import Footer from "@/components/layout/Footer";
-import AIConcierge from "@/components/ui/AIConcierge";
 
 export default function Home() {
   return (
@@ -27,7 +26,6 @@ export default function Home() {
         <WellnessBanner />
       </main>
       <Footer />
-      <AIConcierge />
     </>
   );
 }

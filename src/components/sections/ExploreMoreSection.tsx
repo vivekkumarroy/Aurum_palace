@@ -2,13 +2,14 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
 
 const EXPLORE_ITEMS = [
-  { title: "ENCHANTING SAFARIS",  image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=85" },
-  { title: "LIVING PALACES",      image: "https://images.unsplash.com/photo-1477587458883-47145ed94245?w=800&q=85" },
-  { title: "CITY HOTELS",         image: "https://images.unsplash.com/photo-1529253355930-ddbe423a2ac7?w=800&q=85" },
-  { title: "BEACH RESORTS",       image: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=800&q=85" },
-  { title: "MOUNTAIN RETREATS",   image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=85" },
+  { id: "enchanting-safaris", title: "ENCHANTING SAFARIS",  image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=85" },
+  { id: "living-palaces", title: "LIVING PALACES",      image: "https://images.unsplash.com/photo-1477587458883-47145ed94245?w=800&q=85" },
+  { id: "city-hotels", title: "CITY HOTELS",         image: "https://images.unsplash.com/photo-1529253355930-ddbe423a2ac7?w=800&q=85" },
+  { id: "beach-resorts", title: "BEACH RESORTS",       image: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=800&q=85" },
+  { id: "mountain-retreats", title: "MOUNTAIN RETREATS",   image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=85" },
 ];
 
 const N = EXPLORE_ITEMS.length;
@@ -253,12 +254,12 @@ export default function ExploreMoreSection() {
               transition={{ duration: 0.6 }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 0 }}>
-                <div style={{ width: 36, height: 1, background: "#9a9490", flexShrink: 0 }} />
-                <span style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(2.2rem, 4vw, 3.4rem)", fontWeight: 400, color: "#4a4540", letterSpacing: "0.06em", textTransform: "uppercase", lineHeight: 1.1 }}>
+                <div style={{ width: 36, height: 1, background: "#ffffff", flexShrink: 0 }} />
+                <span style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(2.2rem, 4vw, 3.4rem)", fontWeight: 400, color: "#ffffff", letterSpacing: "0.06em", textTransform: "uppercase", lineHeight: 1.1 }}>
                   EXPLORE
                 </span>
               </div>
-              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(2.2rem, 4vw, 3.4rem)", fontWeight: 400, color: "#4a4540", letterSpacing: "0.06em", textTransform: "uppercase", lineHeight: 1.1 }}>
+              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(2.2rem, 4vw, 3.4rem)", fontWeight: 400, color: "#ffffff", letterSpacing: "0.06em", textTransform: "uppercase", lineHeight: 1.1 }}>
                 MORE
               </h2>
             </motion.div>
@@ -300,9 +301,9 @@ export default function ExploreMoreSection() {
                   <div>
                     <p className="explore-card-title">{o.title}</p>
                   </div>
-                  <button suppressHydrationWarning className="explore-card-more">
+                  <Link href={`/experience/${o.id}`} style={{textDecoration: "none"}} className="explore-card-more">
                     MORE <span style={{ fontSize: "1rem" }}>›</span>
-                  </button>
+                  </Link>
                 </div>
               </div>
             ))}

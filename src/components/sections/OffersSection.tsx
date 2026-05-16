@@ -2,13 +2,14 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
 
 const OFFERS = [
-  { title: "AURUM CLUB",        sub: "Breakfast & Cocktail Inclusive",  image: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=85" },
-  { title: "INTERNATIONAL",     sub: "Escapes & Holiday Packages",      image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=85" },
-  { title: "BEAT THE HEAT",     sub: "Summer Getaway Offers",           image: "/beat_the_heat_new.png" },
-  { title: "ROYAL HERITAGE",    sub: "Udaipur Escape",                  image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=85" },
-  { title: "STAYCATIONS",       sub: "Perfect Summer Escapes",          image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=85" },
+  { id: "aurum-club", title: "AURUM CLUB", sub: "Breakfast & Cocktail Inclusive", image: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=85" },
+  { id: "international", title: "INTERNATIONAL", sub: "Escapes & Holiday Packages", image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=85" },
+  { id: "beat-the-heat", title: "BEAT THE HEAT", sub: "Summer Getaway Offers", image: "/beat_the_heat_new.png" },
+  { id: "royal-heritage", title: "ROYAL HERITAGE", sub: "Udaipur Escape", image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=85" },
+  { id: "staycations", title: "STAYCATIONS", sub: "Perfect Summer Escapes", image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=85" },
 ];
 
 const N = OFFERS.length;
@@ -307,9 +308,9 @@ export default function OffersSection() {
                     <p className="offer-card-title">{o.title}</p>
                     <p className="offer-card-sub">{o.sub}</p>
                   </div>
-                  <button suppressHydrationWarning className="offer-card-more">
+                  <Link href={`/experience/${o.id}`} style={{textDecoration: "none"}} className="offer-card-more">
                     MORE <span style={{ fontSize: "1rem" }}>›</span>
-                  </button>
+                  </Link>
                 </div>
               </div>
             ))}
