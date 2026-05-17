@@ -374,13 +374,20 @@ export default function Navbar() {
                 )}
 
                 <div style={{ marginBottom: 16 }}>
-                  <p style={{ fontFamily: "Inter", fontSize: 10, fontWeight: 600, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.40)", marginBottom: 8 }}>Email Address</p>
-                  <div style={{ background: "#1E2130", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 8 }}>
+                    <p style={{ fontFamily: "Inter", fontSize: 10, fontWeight: 600, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.40)", margin: 0 }}>Email Address</p>
+                    {email.length > 0 && !email.toLowerCase().endsWith("@gmail.com") && (
+                      <p style={{ fontFamily: "Inter", fontSize: 9, fontWeight: 600, color: "rgba(239,68,68,0.8)", margin: 0 }}>
+                        Must end with @gmail.com
+                      </p>
+                    )}
+                  </div>
+                  <div style={{ background: "#1E2130", border: email.length > 0 && !email.toLowerCase().endsWith("@gmail.com") ? "1px solid rgba(239, 68, 68, 0.4)" : "1px solid rgba(255,255,255,0.1)", borderRadius: 8 }}>
                     <input 
                       type="email" 
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="name@example.com" 
+                      placeholder="name@gmail.com" 
                       style={{ width: "100%", background: "transparent", border: "none", outline: "none", padding: "14px 16px", color: "#F0EDE8", fontFamily: "Inter", fontSize: 14 }} 
                     />
                   </div>
@@ -420,27 +427,28 @@ export default function Navbar() {
 
                 <button 
                   onClick={() => {
+                    const isEmailValid = email.toLowerCase().endsWith("@gmail.com");
                     if (authView === "forgot") {
-                      if (!email) { alert("Please enter your email"); return; }
+                      if (!isEmailValid) { alert("Please enter a valid Gmail address (ending in @gmail.com)"); return; }
                       alert("Reset link sent to your email!");
                       setAuthView("login");
                     } else if (authView === "signup") {
-                      if (!email || pass.length < 8 || !name) { alert("Please fill all fields and ensure password is at least 8 characters"); return; }
+                      if (!isEmailValid || pass.length < 8 || !name) { alert("Please fill all fields and ensure a valid Gmail address and password is at least 8 characters"); return; }
                       setIsLoggedIn(true);
                       setLoginOpen(false);
                       setAuthView("login");
                     } else {
-                      if (!email || pass.length < 8) { alert("Please enter email and at least 8 characters for password"); return; }
+                      if (!isEmailValid || pass.length < 8) { alert("Please enter a valid Gmail address and at least 8 characters for password"); return; }
                       setIsLoggedIn(true);
                       setLoginOpen(false);
                       setAuthView("login");
                     }
                   }}
-                  disabled={(authView === "login" && (!email || pass.length < 8)) || (authView === "signup" && (!email || pass.length < 8 || !name)) || (authView === "forgot" && !email)}
+                  disabled={(authView === "login" && (!email.toLowerCase().endsWith("@gmail.com") || pass.length < 8)) || (authView === "signup" && (!email.toLowerCase().endsWith("@gmail.com") || pass.length < 8 || !name)) || (authView === "forgot" && !email.toLowerCase().endsWith("@gmail.com"))}
                   style={{ 
                     width: "100%", 
                     padding: "16px", 
-                    background: ((authView === "login" && (!email || pass.length < 8)) || (authView === "signup" && (!email || pass.length < 8 || !name)) || (authView === "forgot" && !email)) ? "rgba(212,175,55,0.2)" : "#D4AF37", 
+                    background: ((authView === "login" && (!email.toLowerCase().endsWith("@gmail.com") || pass.length < 8)) || (authView === "signup" && (!email.toLowerCase().endsWith("@gmail.com") || pass.length < 8 || !name)) || (authView === "forgot" && !email.toLowerCase().endsWith("@gmail.com"))) ? "rgba(212,175,55,0.2)" : "#D4AF37", 
                     border: "none", 
                     borderRadius: 8, 
                     color: "#0A0F14", 
@@ -449,10 +457,10 @@ export default function Navbar() {
                     fontWeight: 700, 
                     letterSpacing: "0.15em", 
                     textTransform: "uppercase", 
-                    cursor: ((authView === "login" && (!email || pass.length < 8)) || (authView === "signup" && (!email || pass.length < 8 || !name)) || (authView === "forgot" && !email)) ? "not-allowed" : "pointer", 
+                    cursor: ((authView === "login" && (!email.toLowerCase().endsWith("@gmail.com") || pass.length < 8)) || (authView === "signup" && (!email.toLowerCase().endsWith("@gmail.com") || pass.length < 8 || !name)) || (authView === "forgot" && !email.toLowerCase().endsWith("@gmail.com"))) ? "not-allowed" : "pointer", 
                     marginBottom: 24, 
                     transition: "background 0.2s",
-                    opacity: ((authView === "login" && (!email || pass.length < 8)) || (authView === "signup" && (!email || pass.length < 8 || !name)) || (authView === "forgot" && !email)) ? 0.5 : 1
+                    opacity: ((authView === "login" && (!email.toLowerCase().endsWith("@gmail.com") || pass.length < 8)) || (authView === "signup" && (!email.toLowerCase().endsWith("@gmail.com") || pass.length < 8 || !name)) || (authView === "forgot" && !email.toLowerCase().endsWith("@gmail.com"))) ? 0.5 : 1
                   }}
                 >
                   {authView === "forgot" ? "Send Reset Link" : authView === "signup" ? "Create Account" : "Sign In"}

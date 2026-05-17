@@ -387,9 +387,16 @@ function GuestsStep({ data, update }: { data: BookingState; update: (k: keyof Bo
 
       {/* Email */}
       <div style={{marginBottom:20}}>
-        <p style={{fontFamily:"Inter",fontSize:10,fontWeight:600,letterSpacing:"0.16em",textTransform:"uppercase",color:"rgba(255,255,255,0.40)",marginBottom:8}}>Email Address</p>
-        <div className="bk-field">
-          <input type="email" value={data.email} onChange={e => update("email", e.target.value)} placeholder="jane@example.com"
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",marginBottom:8}}>
+          <p style={{fontFamily:"Inter",fontSize:10,fontWeight:600,letterSpacing:"0.16em",textTransform:"uppercase",color:"rgba(255,255,255,0.40)",margin:0}}>Email Address</p>
+          {data.email.length > 0 && !data.email.toLowerCase().endsWith("@gmail.com") && (
+            <p style={{fontFamily:"Inter",fontSize:9,fontWeight:600,color:"rgba(239,68,68,0.8)",margin:0}}>
+              Must end with @gmail.com
+            </p>
+          )}
+        </div>
+        <div className="bk-field" style={{border: data.email.length > 0 && !data.email.toLowerCase().endsWith("@gmail.com") ? "1px solid rgba(239, 68, 68, 0.4)" : undefined}}>
+          <input type="email" value={data.email} onChange={e => update("email", e.target.value)} placeholder="jane@gmail.com"
             style={{width:"100%",background:"transparent",padding:"16px 20px",fontFamily:"Inter",fontSize:14,color:"#F0EDE8",outline:"none",border:"none"}} />
         </div>
       </div>
@@ -762,8 +769,9 @@ export default function BookingFlow() {
     setData(prev => ({ ...prev, [key]: value }));
 
   const n = nights(data.checkIn, data.checkOut);
+  const isEmailValid = data.email.toLowerCase().endsWith("@gmail.com");
   const step1Ok = !!data.checkIn && !!data.checkOut && !!data.property && !!data.suite && n > 0;
-  const step2Ok = step1Ok && !!data.firstName && !!data.lastName && !!data.email && data.phone.length === 10;
+  const step2Ok = step1Ok && !!data.firstName && !!data.lastName && isEmailValid && data.phone.length === 10;
   const step3Ok = step2Ok;
 
   const isDisabled =

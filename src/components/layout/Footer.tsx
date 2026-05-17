@@ -211,7 +211,14 @@ export default function Footer() {
               {subbed ? (
                 <p style={{ fontSize: "0.85rem", color: "#C6A664", marginBottom: 36 }}>Thank you for subscribing!</p>
               ) : (
-                <form onSubmit={(e) => { e.preventDefault(); if (email) setSubbed(true); }} className="footer-form">
+                <form onSubmit={(e) => { 
+                  e.preventDefault(); 
+                  if (email.toLowerCase().endsWith("@gmail.com")) {
+                    setSubbed(true); 
+                  } else {
+                    alert("Please use a valid @gmail.com address.");
+                  }
+                }} className="footer-form">
                   <input
                     type="email" value={email} onChange={(e) => setEmail(e.target.value)} required
                     placeholder="Enter your email Address"
