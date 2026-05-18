@@ -1,8 +1,26 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 
-const QUICK_LINKS_COL1 = ["Hotels", "Dining", "Wellness", "Timeless Weddings", "Event Venues", "Aurum Magazine", "Sitemap"];
-const QUICK_LINKS_COL2 = ["About Aurum", "Holidays", "Offers", "Gifting", "Aurum InnerCircle", "Epicure", "Blog"];
+const QUICK_LINKS_COL1 = [
+  { label: "Hotels", href: "/destinations" },
+  { label: "Dining", href: "/#dining" },
+  { label: "Wellness", href: "/#wellness-circle" },
+  { label: "Timeless Weddings", href: "/#explore" },
+  { label: "Event Venues", href: "/#events" },
+  { label: "Aurum Magazine", href: "/#explore" },
+  { label: "Sitemap", href: "/" },
+];
+
+const QUICK_LINKS_COL2 = [
+  { label: "About Aurum", href: "/#explore" },
+  { label: "Holidays", href: "/#explore" },
+  { label: "Offers", href: "/#offers" },
+  { label: "Gifting", href: "/#explore" },
+  { label: "Aurum InnerCircle", href: "#", action: "signup" },
+  { label: "Epicure", href: "/#dining" },
+  { label: "Blog", href: "/#explore" },
+];
 
 const DESTINATIONS = [
   "Udaipur", "Jaipur", "Goa", "Mumbai", "Maldives", "Dubai", "London", "Paris",
@@ -254,24 +272,61 @@ export default function Footer() {
               </p>
               <div className="footer-quick-links-grid">
                 <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                  {QUICK_LINKS_COL1.map((l) => (
-                    <a key={l} href="#" style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.55)", textDecoration: "none", transition: "color 0.15s" }}
-                      onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.color = "#C6A664"}
-                      onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.color = "rgba(255,255,255,0.55)"}
-                    >{l}</a>
-                  ))}
+                  {QUICK_LINKS_COL1.map((item) => {
+                    const isHash = item.href.startsWith("/#");
+                    if (isHash) {
+                      return (
+                        <a key={item.label} href={item.href} style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.55)", textDecoration: "none", transition: "color 0.15s" }}
+                          onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.color = "#C6A664"}
+                          onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.color = "rgba(255,255,255,0.55)"}
+                        >{item.label}</a>
+                      );
+                    } else {
+                      return (
+                        <Link key={item.label} href={item.href} style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.55)", textDecoration: "none", transition: "color 0.15s" }}
+                          onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.color = "#C6A664"}
+                          onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.color = "rgba(255,255,255,0.55)"}
+                        >{item.label}</Link>
+                      );
+                    }
+                  })}
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                  {QUICK_LINKS_COL2.map((l) => (
-                    <a key={l} href="#" style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.55)", textDecoration: "none", transition: "color 0.15s" }}
-                      onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.color = "#C6A664"}
-                      onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.color = "rgba(255,255,255,0.55)"}
-                    >{l}</a>
-                  ))}
+                  {QUICK_LINKS_COL2.map((item) => {
+                    if (item.action === "signup") {
+                      return (
+                        <button key={item.label}
+                          onClick={() => {
+                            const event = new CustomEvent("open-auth-modal", { detail: { view: "signup" } });
+                            window.dispatchEvent(event);
+                          }}
+                          style={{ background: "none", border: "none", padding: 0, textAlign: "left", fontSize: "0.82rem", color: "rgba(255,255,255,0.55)", textDecoration: "none", transition: "color 0.15s", cursor: "pointer" }}
+                          onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.color = "#C6A664"}
+                          onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.color = "rgba(255,255,255,0.55)"}
+                        >{item.label}</button>
+                      );
+                    }
+                    const isHash = item.href.startsWith("/#");
+                    if (isHash) {
+                      return (
+                        <a key={item.label} href={item.href} style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.55)", textDecoration: "none", transition: "color 0.15s" }}
+                          onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.color = "#C6A664"}
+                          onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.color = "rgba(255,255,255,0.55)"}
+                        >{item.label}</a>
+                      );
+                    } else {
+                      return (
+                        <Link key={item.label} href={item.href} style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.55)", textDecoration: "none", transition: "color 0.15s" }}
+                          onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.color = "#C6A664"}
+                          onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.color = "rgba(255,255,255,0.55)"}
+                        >{item.label}</Link>
+                      );
+                    }
+                  })}
                 </div>
               </div>
             </div>
-
+ 
             {/* Column 3: Connect With Us */}
             <div>
               <p style={{ fontSize: "0.68rem", fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.45)", marginBottom: 20 }}>
@@ -282,7 +337,7 @@ export default function Footer() {
                   <a key={key} href="#" style={{
                     width: 36, height: 36, borderRadius: "50%",
                     border: "1px solid rgba(255,255,255,0.2)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
+                    display: "flex", alignItems: "center", justifyItems: "center", justifyContent: "center",
                     color: "rgba(255,255,255,0.5)", textDecoration: "none",
                     transition: "all 0.2s",
                   }}
@@ -304,7 +359,7 @@ export default function Footer() {
             </div>
           </div>
         </div>
-
+ 
         {/* ── DESTINATIONS expandable row ── */}
         <div style={{ borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
           <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 20px" }}>
@@ -328,10 +383,10 @@ export default function Footer() {
             {destOpen && (
               <div style={{ paddingBottom: 20, display: "flex", flexWrap: "wrap", gap: "8px 24px" }}>
                 {DESTINATIONS.map((d) => (
-                  <a key={d} href="#" style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.5)", textDecoration: "none", transition: "color 0.15s" }}
+                  <Link key={d} href="/destinations" style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.5)", textDecoration: "none", transition: "color 0.15s" }}
                     onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.color = "#C6A664"}
                     onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.color = "rgba(255,255,255,0.5)"}
-                  >{d}</a>
+                  >{d}</Link>
                 ))}
               </div>
             )}

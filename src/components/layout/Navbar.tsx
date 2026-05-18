@@ -43,6 +43,19 @@ export default function Navbar() {
     }
   }, [mobileOpen]);
 
+  // Listen for login/signup modal triggers from footer or other components
+  useEffect(() => {
+    const handleOpenAuth = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      if (customEvent.detail?.view) {
+        setAuthView(customEvent.detail.view);
+      }
+      setLoginOpen(true);
+    };
+    window.addEventListener("open-auth-modal", handleOpenAuth);
+    return () => window.removeEventListener("open-auth-modal", handleOpenAuth);
+  }, []);
+
   return (
     <>
       <style>{`
