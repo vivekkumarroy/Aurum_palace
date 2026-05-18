@@ -3,7 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 
 const QUICK_LINKS_COL1 = [
-  { label: "Hotels", href: "/destinations" },
+  { label: "Hotels", href: "#" },
   { label: "Dining", href: "/#dining" },
   { label: "Wellness", href: "/#wellness-circle" },
   { label: "Timeless Weddings", href: "/#explore" },
@@ -20,11 +20,6 @@ const QUICK_LINKS_COL2 = [
   { label: "Aurum InnerCircle", href: "#", action: "signup" },
   { label: "Epicure", href: "/#dining" },
   { label: "Blog", href: "/#explore" },
-];
-
-const DESTINATIONS = [
-  "Udaipur", "Jaipur", "Goa", "Mumbai", "Maldives", "Dubai", "London", "Paris",
-  "Singapore", "New York", "Bangkok", "Bali", "Vienna", "Rome", "Tokyo",
 ];
 
 // Social icons as inline SVG
@@ -64,7 +59,6 @@ const SocialIcons = {
 export default function Footer() {
   const [email, setEmail] = useState("");
   const [subbed, setSubbed] = useState(false);
-  const [destOpen, setDestOpen] = useState(false);
 
   return (
     <>
@@ -360,38 +354,7 @@ export default function Footer() {
           </div>
         </div>
  
-        {/* ── DESTINATIONS expandable row ── */}
-        <div style={{ borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
-          <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 20px" }}>
-            <button
-              onClick={() => setDestOpen(!destOpen)}
-              style={{
-                width: "100%", display: "flex", alignItems: "center", justifyItems: "center", justifyContent: "space-between",
-                padding: "18px 0", background: "none", border: "none", cursor: "pointer", color: "#fff",
-              }}
-            >
-              <span style={{ fontSize: "0.68rem", fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.45)" }}>
-                Destinations
-              </span>
-              <span style={{
-                fontSize: "1.4rem", color: "rgba(255,255,255,0.45)", lineHeight: 1,
-                transform: destOpen ? "rotate(45deg)" : "rotate(0deg)",
-                transition: "transform 0.3s ease",
-                display: "inline-block",
-              }}>+</span>
-            </button>
-            {destOpen && (
-              <div style={{ paddingBottom: 20, display: "flex", flexWrap: "wrap", gap: "8px 24px" }}>
-                {DESTINATIONS.map((d) => (
-                  <Link key={d} href="/destinations" style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.5)", textDecoration: "none", transition: "color 0.15s" }}
-                    onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.color = "#C6A664"}
-                    onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.color = "rgba(255,255,255,0.5)"}
-                  >{d}</Link>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
+
 
         {/* ── BOTTOM bar ── */}
         <div className="footer-bottom-bar">
